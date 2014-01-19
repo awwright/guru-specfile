@@ -12,7 +12,7 @@
 # $ guru test # build all testing-related targets
 # $ guru npm # build an npm package
 # $ guru xp # pre-build all cross-platform components e.g. minification, testing, preprocessing
-# $ guru rp os=centos # pre-build all cross-platform components e.g. minification, testing, preprocessing
+# $ guru rpm rpm-flavor=centos # pre-build all cross-platform components e.g. minification, testing, preprocessing
 
 <http://example.com/project.doap> [
         # Declare what classes the resource is an instance of
