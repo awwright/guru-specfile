@@ -1,0 +1,41 @@
+# This is, of course, a comment
+
+# A Specfile allows us to make declaratons about what our files _are_
+# We can use these declarations to perform actions on files, for instance,
+# say "Compile all CoffeescriptNodejs files to a JavascriptNodejs file"
+# Other people can make declarations about classes of files, too!
+# Declare a file to be an instance of a MochaTest, and then the `guru test` command will automatically run mocha against them!
+
+# The `guru` command builds or runs actions against a file or classes of files.
+
+# Some things you should be able to do:
+# $ guru test # build all testing-related targets
+# $ guru npm # build an npm package
+# $ guru xp # pre-build all cross-platform components e.g. minification, testing, preprocessing
+# $ guru rp os=centos # pre-build all cross-platform components e.g. minification, testing, preprocessing
+
+<http://example.com/project.doap> [
+        # Declare what classes the resource is an instance of
+        # you can also use the "a" keyword as in Turtle
+        type NodejsPackage ;
+        # Metadata for various package management tools
+        npmname "jsonschema" ;
+        rpmname "nodejs-jsonschema" ;
+        debname "nodejs-jsonschema" ;
+        ebuildname "dev-libs/nodejs-jsonschema" 
+        # The package version is automatically detected from a VERSION file or by asking Git, or some other file
+]
+ 
+lib/**.js [
+        a NodejsModule, CheckCoverage, LintTest;
+]
+ 
+lib/**.coffee [
+        a CoffeeScriptFile, CoffeeScriptFileNodejs;
+]
+
+# There's a number of ways you can define how to build a file. You can explicitly define the pipeline:
+
+build/img/* [
+	a 2;
+]
