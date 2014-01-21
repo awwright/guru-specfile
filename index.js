@@ -40,6 +40,11 @@ function consumeSpecfile(data, p){
 			res.p=r.p;
 			continue;
 		}
+		if(r=consumeStatement(data, res.p)){
+			res.p=r.p;
+			res.resources.push({subject:r.subject, properties:r.properties});
+			continue;
+		}
 		if(r=consumeDirective(data, res.p)){
 			res.p=r.p;
 			res.directives.push(r.directive);
@@ -123,6 +128,43 @@ function consumePattern(data, p){
 	if(data[p.o]!==']') return;
 	advanceCharacter.call(p, data[p.o]);
 	if(directive.length) return {p:p, pattern:pattern, directive:directive};
+}
+
+function consumeStatement(data, p){
+	debug('Statement.Subject', data, p);
+	var r, p=initPosition(p);
+	var subject='';
+	var properties=[];
+
+	// Consume the subject
+	// TODO allow a URI, a Glob, or a CURIE
+	while(data[p.o]){
+		if(data[p.o].match(/\s/)) break;
+		subject += data[p.o];
+		advanceCharacter.call(p, data[p.o]);
+	}
+	advanceCharacter.call(p, data[p.o]);
+
+	debug('Statement.Properties', data, p);
+	// Consume one or more properties
+	if(r=consumeProperty(data, p)){
+		properties.push({predicate:r.predicate, objects:r.objects});
+		p=r.p;
+	}else return;
+	while(data[p.o]){
+		// Consume whitespace, a ";", then another property
+		if(r=consumeWhitespace(data, p)) p=r.p;
+		if(data[p.o]!=';') break;
+		advanceCharacter.call(p, data[p.o]);
+		if(r=consumeProperty(data, p)){
+			properties.push({predicate:r.predicate, objects:r.objects});
+			p=r.p;
+		}else break;
+	}
+	if(r=consumeWhitespace(data, p)) p=r.p;
+	if(data[p.o]!=='.') return;
+	advanceCharacter.call(p, data[p.o]);
+	if(properties.length) return {p:p, subject:subject, properties:properties};
 }
 
 function consumePatternDirective(data, p){

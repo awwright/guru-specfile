@@ -45,29 +45,3 @@ var rules = parse(data);
 
 console.log('Parsed data:');
 console.log(require('util').inspect(rules, null, null));
-
-var types = {};
-
-var remaining = 0;
-rules.resources.forEach(function(n){
-	//var files = n.split(',').map(function(v){return v.trim()}).forEach(function(pattern){});
-	remaining++;
-	glob(n.pattern, {}, function (er, files) {
-		n.directive.forEach(function(statement){
-			if(statement.predicate==='type' || statement.predicate==='a'){
-				statement.objects.forEach(function(object){
-					var a = types[object] = types[object] || [];
-					files.forEach(function(n){
-						a.push(n);
-					});
-				});
-			}
-		});
-		if(--remaining===0) return void haveTypes();
-	})
-});
-
-function haveTypes(){
-	console.log('TYPES:');
-	console.log(types);
-}
