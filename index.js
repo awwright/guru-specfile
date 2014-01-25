@@ -287,7 +287,7 @@ function consumeURI(data, p){
 	}
 }
 
-exports.parseSpecfile0 = parseSpecfile0;
-function parseSpecfile0(data){
+exports.parseDocument = parseDocument;
+function parseDocument(data){
 	return consumeSpecfile(data, initPosition({}));
 }
