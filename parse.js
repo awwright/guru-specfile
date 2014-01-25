@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 var fs=require('fs');
-var parse=require('./').parseSpecfile0;
+var parse=require('./').parseDocument;
 var glob=require('glob');
 
 var specfilePath = 'Specfile';
