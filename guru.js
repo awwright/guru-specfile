@@ -78,17 +78,22 @@ rules.resources.forEach(function(n){
 	})
 });
 
+var actionHandlers = {
+	default: function defaultAction(){
+		console.log(types);
+	},
+	JSHintTest: function JSHintTest(){
+		var files = types['JSHintTest'] || [];
+		gulp.src(files).pipe(gulp_jshint('.jshintrc')).pipe(gulp_jshint.reporter('default'));
+	}
+};
+
 function haveTypes(){
 	//console.log('TYPES:\n',console.log(types);
-
-	function forEach(type, cb){
-		var arr = types[type] || [];
-		arr.forEach(cb);
-	}
-
-	var JSHintTest = types['JSHintTest'] || [];
-	if(JSHintTest){
-		gulp.src(JSHintTest).pipe(gulp_jshint('.jshintrc')).pipe(gulp_jshint.reporter('default'));
-
-	}
+	if(!actions.length) actions.push('default');
+	actions.forEach(function(v){
+		var a = actionHandlers[v];
+		if(!a) throw new Error('Unknown action '+v);
+		a();
+	});
 }
